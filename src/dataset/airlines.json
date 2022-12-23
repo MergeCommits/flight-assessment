@@ -1,0 +1,12 @@
+{
+    "airlines": [
+        {
+            "code": "AC",
+            "name": "Air Canada"
+        },
+        {
+            "code": "WJ",
+            "name": "West Jet"
+        }
+    ]
+}

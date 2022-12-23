@@ -1,0 +1,8 @@
+# Vendor files
+tools/php-cs-fixer/vendor/
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+
+# Visual Studio Code
+.vscode
