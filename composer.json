@@ -1,0 +1,19 @@
+{
+    "name": "markjarjour/flight-assessment",
+    "authors": [
+        {
+            "name": "Mark Jarjour",
+            "email": "markjarjour@gmail.com"
+        }
+    ],
+    "require": {},
+    "scripts": {
+        "lint": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src",
+        "start": "php -S localhost:8000 index.php"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

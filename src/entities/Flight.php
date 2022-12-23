@@ -1,7 +1,11 @@
 <?php
 
-use App\Entity\Airline;
-use App\Entity\Airport;
+namespace App\Entities;
+
+use App\Entities\Airline;
+use App\Entities\Airport;
+use App\Helpers\Money;
+use Exception;
 
 class Flight
 {
@@ -21,8 +25,7 @@ class Flight
         Airport $arrival_airport,
         $arrival_time,
         Money $price
-    )
-    {
+    ) {
         $this->airline = $airline;
         $this->number = $number;
         $this->departure_airport = $departure_airport;
@@ -47,8 +50,9 @@ class Flight
 
     /**
      * @param Airline[] $airlines
+     * @param Airport[] $airports
      */
-    public static function fromJson($json, $airlines)
+    public static function fromJson($json, $airlines, $airports)
     {
         if (!isset($airlines[$json['airline']])) {
             throw new Exception("Airline {$json['airline']} not found");
@@ -57,11 +61,26 @@ class Flight
         return new Flight(
             $airlines[$json['airline']],
             $json['number'],
-            $json['departure_airport'],
+            $airports[$json['departure_airport']],
             $json['departure_time'],
-            $json['arrival_airport'],
+            $airports[$json['arrival_airport']],
             $json['arrival_time'],
             new Money($json['price'])
         );
+    }
+
+    /**
+     * @param Airline[] $airlines
+     * @param Airport[] $airports
+     */
+    public static function fromJsonArray($json, $airlines, $airports)
+    {
+        $flights = [];
+        foreach ($json as $flightJson) {
+            $flight = Flight::fromJson($flightJson, $airlines, $airports);
+            $flights[] = $flight;
+        }
+
+        return $flights;
     }
 }

@@ -1,4 +1,5 @@
 # Vendor files
+/vendor/
 tools/php-cs-fixer/vendor/
 
 # PHP CS Fixer

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entities;
 
-class Airport {
+class Airport
+{
     public $code;
     public $city_code;
     public $name;
@@ -13,7 +14,8 @@ class Airport {
     public $longitude;
     public $timezone;
 
-    public function __construct($code, $city_code, $name, $city, $country_code, $region_code, $latitude, $longitude, $timezone) {
+    public function __construct($code, $city_code, $name, $city, $country_code, $region_code, $latitude, $longitude, $timezone)
+    {
         $this->code = $code;
         $this->city_code = $city_code;
         $this->name = $name;
@@ -25,7 +27,8 @@ class Airport {
         $this->timezone = $timezone;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             'code' => $this->code,
             'city_code' => $this->city_code,
@@ -39,7 +42,8 @@ class Airport {
         ];
     }
 
-    public static function fromJson($json) {
+    public static function fromJson($json)
+    {
         return new Airport(
             $json['code'],
             $json['city_code'],
@@ -51,5 +55,15 @@ class Airport {
             $json['longitude'],
             $json['timezone']
         );
+    }
+
+    public static function fromJsonArray($json)
+    {
+        $airports = [];
+        foreach ($json as $airportJson) {
+            $airport = Airport::fromJson($airportJson);
+            $airports[$airport->code] = $airport;
+        }
+        return $airports;
     }
 }
