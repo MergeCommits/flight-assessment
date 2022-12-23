@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entities;
 
 use App\Entities\Airline;
@@ -56,6 +58,14 @@ class Flight
     {
         if (!isset($airlines[$json['airline']])) {
             throw new Exception("Airline {$json['airline']} not found");
+        }
+
+        if (!isset($airports[$json['departure_airport']])) {
+            throw new Exception("Departure airport {$json['departure_airport']} not found");
+        }
+
+        if (!isset($airports[$json['arrival_airport']])) {
+            throw new Exception("Arrival airport {$json['arrival_airport']} not found");
         }
 
         return new Flight(

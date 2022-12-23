@@ -1,5 +1,23 @@
 # Flight assessment
 
+## Setup
+
+Get dependencies:
+
+    composer install
+
+Run automated tests:
+
+    composer test
+
+Run linter:
+
+    composer lint
+
+Start web server:
+
+    composer start
+
 ## API Documentation
 
 ## Assumptions

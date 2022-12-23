@@ -11,12 +11,102 @@
         },
         {
             "airline": "AC",
+            "number": "347",
+            "departure_airport": "YUL",
+            "departure_time": "19:00",
+            "arrival_airport": "YCC",
+            "arrival_time": "20:11",
+            "price": "353.41"
+        },
+        {
+            "airline": "AC",
             "number": "302",
             "departure_airport": "YVR",
             "departure_time": "11:30",
             "arrival_airport": "YUL",
             "arrival_time": "19:11",
             "price": "220.63"
+        },
+        {
+            "airline": "AC",
+            "number": "346",
+            "departure_airport": "YVR",
+            "departure_time": "11:30",
+            "arrival_airport": "YCC",
+            "arrival_time": "18:35",
+            "price": "75.41"
+        },
+        {
+            "airline": "AC",
+            "number": "348",
+            "departure_airport": "YCC",
+            "departure_time": "07:00",
+            "arrival_airport": "YUL",
+            "arrival_time": "08:11",
+            "price": "745.41"
+        },
+        {
+            "airline": "AC",
+            "number": "349",
+            "departure_airport": "YCC",
+            "departure_time": "09:00",
+            "arrival_airport": "YVR",
+            "arrival_time": "16:05",
+            "price": "765.41"
+        },
+        {
+            "airline": "WJ",
+            "number": "401",
+            "departure_airport": "YUL",
+            "departure_time": "07:35",
+            "arrival_airport": "YVR",
+            "arrival_time": "10:05",
+            "price": "5730.23"
+        },
+        {
+            "airline": "WJ",
+            "number": "447",
+            "departure_airport": "YUL",
+            "departure_time": "19:00",
+            "arrival_airport": "YCC",
+            "arrival_time": "20:11",
+            "price": "2503.41"
+        },
+        {
+            "airline": "WJ",
+            "number": "402",
+            "departure_airport": "YVR",
+            "departure_time": "11:30",
+            "arrival_airport": "YUL",
+            "arrival_time": "19:11",
+            "price": "4020.63"
+        },
+        {
+            "airline": "WJ",
+            "number": "446",
+            "departure_airport": "YVR",
+            "departure_time": "11:30",
+            "arrival_airport": "YCC",
+            "arrival_time": "18:35",
+            "price": "205.41"
+        },
+        {
+            "airline": "WJ",
+            "number": "448",
+            "departure_airport": "YCC",
+            "departure_time": "07:00",
+            "arrival_airport": "YUL",
+            "arrival_time": "08:11",
+            "price": "7605.41"
+        },
+        {
+            "airline": "WJ",
+            "number": "449",
+            "departure_airport": "YCC",
+            "departure_time": "09:00",
+            "arrival_airport": "YVR",
+            "arrival_time": "16:05",
+            "price": "7705.41"
         }
     ]
 }

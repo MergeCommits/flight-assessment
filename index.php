@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
+
+use App\Entities\Airport;
+use App\Entities\Airline;
+use App\Entities\Flight;
 
 require_once('vendor/autoload.php');
-
-use App\Entities\Airline;
 
 function getArrayFromJsonFile(string $filename, string $key)
 {
@@ -11,12 +13,7 @@ function getArrayFromJsonFile(string $filename, string $key)
 }
 
 $airlines = Airline::fromJsonArray(getArrayFromJsonFile('airlines.json', 'airlines'));
+$airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airports'));
+$flights = Flight::fromJsonArray(getArrayFromJsonFile('flights.json', 'flights'), $airlines, $airports);
 
-// $airportsJson = json_decode(file_get_contents('/dataset/airports.json'), true);
-// $airports = Airport::fromJsonArray($airportsJson);
-
-// $flightsJson = json_decode(file_get_contents('/dataset/flights.json'), true);
-// $flights = Flight::fromJsonArray($flightsJson, $airlines, $airports);
-
-// $airline = new Airline('AC', 'Air Canada');
-echo($airlines['AC']->name);
+echo '<pre>' . var_export($flights[0], true) . '</pre>';

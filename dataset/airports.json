@@ -21,6 +21,17 @@
             "latitude": 49.194698,
             "longitude": -123.179192,
             "timezone": "America/Vancouver"
+        },
+        {
+            "code": "YCC",
+            "city_code": "YCC",
+            "name": "Cornwall Regional Airport",
+            "city": "Cornwall",
+            "country_code": "CA",
+            "region_code": "ON",
+            "latitude": 45.092499,
+            "longitude": -74.563599,
+            "timezone": "America/Toronto"
         }
     ]
 }
