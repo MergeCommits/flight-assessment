@@ -25,5 +25,5 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
 $flights = Flight::fromJsonArray(getArrayFromJsonFile('flights.json', 'flights'), $airlines, $airports);
 
 $departureDate = new DateTime('2020-02-22');
-$scheduleFlight = new ScheduledFlight($flights[0], $departureDate);
+$scheduleFlight = new ScheduledFlight($flights->get(0), $departureDate);
 betterDump($scheduleFlight);

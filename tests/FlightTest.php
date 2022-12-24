@@ -7,6 +7,8 @@ use App\Helpers\Money;
 use App\Entities\Airline;
 use App\Entities\Airport;
 use App\Entities\Flight;
+use App\Arrays\Maps\AirlineMap;
+use App\Arrays\Maps\AirportMap;
 
 final class FlightTest extends TestCase
 {
@@ -28,26 +30,24 @@ final class FlightTest extends TestCase
             'price' => '273.23'
         ];
 
-        $this->airlines = [
-            'AC' => new Airline('AC', 'Air Canada'),
-            'WS' => new Airline('WS', 'WestJet')
-        ];
+        $this->airlines = new AirlineMap();
+        $this->airlines->add(new Airline('AC', 'Air Canada'));
+        $this->airlines->add(new Airline('WS', 'WestJet'));
 
-        $this->airports = [
-            'YUL' => new Airport('YUL', 'Montreal', '', '', '', '', '', '', new DateTimeZone('America/Montreal')),
-            'YVR' => new Airport('YVR', 'Vancouver', '', '', '', '', '', '', new DateTimeZone('America/Vancouver'))
-        ];
+        $this->airports = new AirportMap();
+        $this->airports->add(new Airport('YUL', 'Montreal', '', '', '', '', '', '', new DateTimeZone('America/Montreal')));
+        $this->airports->add(new Airport('YVR', 'Vancouver', '', '', '', '', '', '', new DateTimeZone('America/Vancouver')));
     }
 
     public function testFlightFromJson(): void
     {
         $flight = Flight::fromJson($this->flightJson, $this->airlines, $this->airports);
 
-        $this->assertEquals($flight->airline, $this->airlines['AC']);
+        $this->assertEquals($flight->airline, $this->airlines->get('AC'));
         $this->assertEquals($flight->number, '301');
-        $this->assertEquals($flight->departureAirport, $this->airports['YUL']);
+        $this->assertEquals($flight->departureAirport, $this->airports->get('YUL'));
         $this->assertEquals($flight->departureTime, new DateTime('jan 1 1970 22:00', new DateTimeZone('America/Montreal')));
-        $this->assertEquals($flight->arrivalAirport, $this->airports['YVR']);
+        $this->assertEquals($flight->arrivalAirport, $this->airports->get('YVR'));
         $this->assertEquals($flight->arrivalTime, new DateTime('jan 1 1970 20:00', new DateTimeZone('America/Vancouver')));
         $this->assertEquals($flight->price, new Money('273.23'));
     }

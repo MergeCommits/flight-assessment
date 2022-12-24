@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Entities\Airport;
+use App\Entities\Flight;
+use App\Entities\ScheduledFlight;
+use DateTime;
+
 class FlightPlan
 {
     /**
@@ -21,15 +26,5 @@ class FlightPlan
         return [
             'flights' => $this->flights
         ];
-    }
-
-    public static function fromJson($json, $airlines, $airports)
-    {
-        $flights = [];
-        foreach ($json as $key => $flightJson) {
-            $flight = Flight::fromJson($flightJson, $airlines, $airports);
-            $flights[] = $flight;
-        }
-        return new FlightPlan($flights);
     }
 }

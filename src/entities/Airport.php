@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entities;
 
+use App\Arrays\FlightArray;
+use App\Arrays\Maps\AirportMap;
 use DateTimeZone;
 
 class Airport
@@ -17,6 +19,15 @@ class Airport
     public $latitude;
     public $longitude;
     public $timezone;
+    private $flights;
+    public function addFlight(Flight $flight)
+    {
+        $this->flights->add($flight);
+    }
+    public function getFlights()
+    {
+        return $this->flights;
+    }
 
     public function __construct(
         string $code,
@@ -38,6 +49,8 @@ class Airport
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->timezone = $timezone;
+
+        $this->flights = new FlightArray();
     }
 
     public function jsonSerialize()
@@ -70,12 +83,12 @@ class Airport
         );
     }
 
-    public static function fromJsonArray($json)
+    public static function fromJsonArray($json): AirportMap
     {
-        $airports = [];
-        foreach ($json as $airportJson) {
+        $airports = new AirportMap();
+        foreach ($json as $key => $airportJson) {
             $airport = Airport::fromJson($airportJson);
-            $airports[$airport->code] = $airport;
+            $airports->add($airport);
         }
         return $airports;
     }

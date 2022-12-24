@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entities;
 
+use App\Arrays\Maps\AirlineMap;
+
 class Airline
 {
     public $code;
@@ -31,12 +33,12 @@ class Airline
         );
     }
 
-    public static function fromJsonArray($json)
+    public static function fromJsonArray($json): AirlineMap
     {
-        $airlines = [];
+        $airlines = new AirlineMap();
         foreach ($json as $key => $airlineJson) {
             $airline = Airline::fromJson($airlineJson);
-            $airlines[$airline->code] = $airline;
+            $airlines->add($airline);
         }
         return $airlines;
     }
