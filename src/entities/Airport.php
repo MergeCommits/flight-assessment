@@ -4,26 +4,37 @@ declare(strict_types=1);
 
 namespace App\Entities;
 
+use DateTimeZone;
+
 class Airport
 {
     public $code;
-    public $city_code;
+    public $cityCode;
     public $name;
     public $city;
-    public $country_code;
-    public $region_code;
+    public $countryCode;
+    public $regionCode;
     public $latitude;
     public $longitude;
     public $timezone;
 
-    public function __construct($code, $city_code, $name, $city, $country_code, $region_code, $latitude, $longitude, $timezone)
-    {
+    public function __construct(
+        string $code,
+        string $cityCode,
+        string $name,
+        string $city,
+        string $countryCode,
+        string $regionCode,
+        string $latitude,
+        string $longitude,
+        DateTimeZone $timezone
+    ) {
         $this->code = $code;
-        $this->city_code = $city_code;
+        $this->cityCode = $cityCode;
         $this->name = $name;
         $this->city = $city;
-        $this->country_code = $country_code;
-        $this->region_code = $region_code;
+        $this->countryCode = $countryCode;
+        $this->regionCode = $regionCode;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->timezone = $timezone;
@@ -33,11 +44,11 @@ class Airport
     {
         return [
             'code' => $this->code,
-            'city_code' => $this->city_code,
+            'city_code' => $this->cityCode,
             'name' => $this->name,
             'city' => $this->city,
-            'country_code' => $this->country_code,
-            'region_code' => $this->region_code,
+            'country_code' => $this->countryCode,
+            'region_code' => $this->regionCode,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'timezone' => $this->timezone
@@ -53,9 +64,9 @@ class Airport
             $json['city'],
             $json['country_code'],
             $json['region_code'],
-            $json['latitude'],
-            $json['longitude'],
-            $json['timezone']
+            (string) $json['latitude'],
+            (string) $json['longitude'],
+            new DateTimeZone($json['timezone'])
         );
     }
 

@@ -9,7 +9,7 @@ class Airline
     public $code;
     public $name;
 
-    public function __construct($code, $name)
+    public function __construct(string $code, string $name)
     {
         $this->code = $code;
         $this->name = $name;

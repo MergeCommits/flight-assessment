@@ -7,33 +7,35 @@ namespace App\Entities;
 use App\Entities\Airline;
 use App\Entities\Airport;
 use App\Helpers\Money;
+use DateTime;
+use DateTimeZone;
 use Exception;
 
 class Flight
 {
-    public Airline $airline;
+    public $airline;
     public $number;
-    public Airport $departure_airport;
-    public $departure_time;
-    public Airport $arrival_airport;
-    public $arrival_time;
-    public Money $price;
+    public $departureAirport;
+    public $departureTime;
+    public $arrivalAirport;
+    public $arrivalTime;
+    public $price;
 
     public function __construct(
-        $airline,
-        $number,
-        Airport $departure_airport,
-        $departure_time,
-        Airport $arrival_airport,
-        $arrival_time,
+        Airline $airline,
+        string $number,
+        Airport $departureAirport,
+        DateTime $departureTime,
+        Airport $arrivalAirport,
+        DateTime $arrivalTime,
         Money $price
     ) {
         $this->airline = $airline;
         $this->number = $number;
-        $this->departure_airport = $departure_airport;
-        $this->departure_time = $departure_time;
-        $this->arrival_airport = $arrival_airport;
-        $this->arrival_time = $arrival_time;
+        $this->departureAirport = $departureAirport;
+        $this->departureTime = $departureTime;
+        $this->arrivalAirport = $arrivalAirport;
+        $this->arrivalTime = $arrivalTime;
         $this->price = $price;
     }
 
@@ -42,10 +44,10 @@ class Flight
         return [
             'airline' => $this->airline,
             'number' => $this->number,
-            'departure_airport' => $this->departure_airport,
-            'departure_time' => $this->departure_time,
-            'arrival_airport' => $this->arrival_airport,
-            'arrival_time' => $this->arrival_time,
+            'departure_airport' => $this->departureAirport,
+            'departure_time' => $this->departureTime,
+            'arrival_airport' => $this->arrivalAirport,
+            'arrival_time' => $this->arrivalTime,
             'price' => $this->price
         ];
     }
@@ -57,24 +59,32 @@ class Flight
     public static function fromJson($json, $airlines, $airports)
     {
         if (!isset($airlines[$json['airline']])) {
-            throw new Exception("Airline {$json['airline']} not found");
+            throw new Exception("Invalid airline code: {$json['airline']}");
         }
 
         if (!isset($airports[$json['departure_airport']])) {
-            throw new Exception("Departure airport {$json['departure_airport']} not found");
+            throw new Exception("Invalid departure airport code: {$json['departure_airport']}");
         }
 
         if (!isset($airports[$json['arrival_airport']])) {
-            throw new Exception("Arrival airport {$json['arrival_airport']} not found");
+            throw new Exception("Invalid arrival airport code: {$json['arrival_airport']}");
         }
+
+        $departureAirport = $airports[$json['departure_airport']];
+        $departureTime = DateTime::createFromFormat('H:i', $json['departure_time'], $departureAirport->timezone)
+            ->setDate(1970, 1, 1);
+
+        $arrivalAirport = $airports[$json['arrival_airport']];
+        $arrivalTime = DateTime::createFromFormat('H:i', $json['arrival_time'], $arrivalAirport->timezone)
+            ->setDate(1970, 1, 1);
 
         return new Flight(
             $airlines[$json['airline']],
             $json['number'],
             $airports[$json['departure_airport']],
-            $json['departure_time'],
+            $departureTime,
             $airports[$json['arrival_airport']],
-            $json['arrival_time'],
+            $arrivalTime,
             new Money($json['price'])
         );
     }
