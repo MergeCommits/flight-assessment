@@ -14,34 +14,51 @@ class ScheduledFlight
     public $departureDateTime;
     public $arrivalDateTime;
 
-    public function __construct(Flight $flight, DateTime $departureDate)
+    public function __construct(Flight $flight, DateTime $arrivalDateTime)
     {
         $this->flight = $flight;
 
-        $this->departureDateTime = new DateTime(
-            $departureDate->format('Y-m-d') . ' ' . $flight->departureTime->format('H:i'),
+        $this->departureDateTime = self::computeDepartureDateTime(
+            $arrivalDateTime,
+            $flight->departureTime,
             $flight->departureAirport->timezone
         );
 
-        $this->arrivalDateTime = self::computeArrivalDate(
+        $this->arrivalDateTime = self::computeArrivalDateTime(
             $this->departureDateTime,
             $flight->arrivalTime,
             $flight->arrivalAirport->timezone
         );
     }
 
-    private static function computeArrivalDate(DateTime $departureDate, DateTime $arrivalTime, DateTimeZone $arrivalTimezone)
+    private static function computeDepartureDateTime(
+        DateTime $arrivalDateTime,
+        DateTime $departureTime,
+        DateTimeZone $departureTimezone
+    ): DateTime {
+        $candidateDepartureDateTime = new DateTime(
+            $arrivalDateTime->format('Y-m-d') . ' ' . $departureTime->format('H:i'),
+            $departureTimezone
+        );
+
+        if ($candidateDepartureDateTime <= $arrivalDateTime) {
+            $candidateDepartureDateTime->modify('+1 day');
+        }
+
+        return $candidateDepartureDateTime;
+    }
+
+    private static function computeArrivalDateTime(DateTime $departureDate, DateTime $arrivalTime, DateTimeZone $arrivalTimezone)
     {
-        $arrivalDate = new DateTime(
+        $candidateArrivalDateTime = new DateTime(
             $departureDate->format('Y-m-d') . ' ' . $arrivalTime->format('H:i'),
             $arrivalTimezone
         );
 
-        if ($arrivalDate <= $departureDate) {
-            echo "{$arrivalTime->format('Y-m-d H:i')} <= {$departureDate->format('Y-m-d H:i')}" . PHP_EOL;
-            $arrivalDate->modify('+1 day');
+        if ($candidateArrivalDateTime <= $departureDate) {
+            $candidateArrivalDateTime->modify('+1 day');
         }
 
-        return $arrivalDate;
+        return $candidateArrivalDateTime;
     }
 }

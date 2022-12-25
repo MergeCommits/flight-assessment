@@ -15,6 +15,11 @@ class FlightArray
         $this->flights[] = $flight;
     }
 
+    public function get(int $index): Flight
+    {
+        return $this->flights[$index];
+    }
+
     public function joinFlightNumbers(string $separator): string
     {
         $flightNumbers = [];

@@ -17,6 +17,8 @@ final class ScheduledFlightTest extends TestCase
 
     public $airports;
 
+    public $arrivalDateTimeOneHourBeforeDeparture;
+
     public function setUp(): void
     {
         $this->airlines = [
@@ -38,11 +40,17 @@ final class ScheduledFlightTest extends TestCase
             new DateTime('jan 1 1970 10:00', new DateTimeZone('America/Vancouver')),
             new Money('273.23')
         );
+
+        $this->arrivalDateTimeOneHourBeforeDeparture = new DateTime(
+            '2020-02-22 ' . $this->flight->departureTime->format('H:i'),
+            new DateTimeZone('America/Montreal')
+        );
+        $this->arrivalDateTimeOneHourBeforeDeparture->modify('-1 hour');
     }
 
     public function testScheduledFlightConstruction(): void
     {
-        $scheduledFlight = new ScheduledFlight($this->flight, new DateTime('2020-02-22'));
+        $scheduledFlight = new ScheduledFlight($this->flight, $this->arrivalDateTimeOneHourBeforeDeparture);
 
         $this->assertEquals($scheduledFlight->flight, $this->flight);
 
@@ -54,7 +62,7 @@ final class ScheduledFlightTest extends TestCase
 
     public function testScheduledFlightCorrectlyAdvancesTheArrivalDateTime(): void
     {
-        $scheduledFlight = new ScheduledFlight($this->flight, new DateTime('2020-02-22'));
+        $scheduledFlight = new ScheduledFlight($this->flight, $this->arrivalDateTimeOneHourBeforeDeparture);
 
         $this->assertEquals($scheduledFlight->arrivalDateTime, new DateTime(
             '2020-02-23 ' . $this->flight->arrivalTime->format('H:i'),
@@ -66,11 +74,34 @@ final class ScheduledFlightTest extends TestCase
     {
         $this->flight->arrivalTime = new DateTime('jan 1 1970 20:00', new DateTimeZone('America/Vancouver'));
 
-        $scheduledFlight = new ScheduledFlight($this->flight, new DateTime('2020-02-22'));
+        $scheduledFlight = new ScheduledFlight($this->flight, $this->arrivalDateTimeOneHourBeforeDeparture);
 
         $this->assertEquals($scheduledFlight->arrivalDateTime, new DateTime(
             '2020-02-22 ' . $this->flight->arrivalTime->format('H:i'),
             $this->flight->arrivalAirport->timezone
+        ));
+    }
+
+    public function testScheduledFlightAssignsCorrectDepartureDateWhenArrivalIsEarly()
+    {
+        $scheduledFlight = new ScheduledFlight($this->flight, $this->arrivalDateTimeOneHourBeforeDeparture);
+
+        $this->assertEquals($scheduledFlight->departureDateTime, new DateTime(
+            '2020-02-22 ' . $this->flight->departureTime->format('H:i'),
+            $this->flight->departureAirport->timezone
+        ));
+    }
+
+    public function testScheduledFlightAssignsCorrectDepartureDateWhenArrivalIsLate()
+    {
+        $arrivalDateTimeOneHourAfterDeparture = clone $this->arrivalDateTimeOneHourBeforeDeparture;
+        $arrivalDateTimeOneHourAfterDeparture->modify('+2 hours');
+
+        $scheduledFlight = new ScheduledFlight($this->flight, $arrivalDateTimeOneHourAfterDeparture);
+
+        $this->assertEquals($scheduledFlight->departureDateTime, new DateTime(
+            '2020-02-23 ' . $this->flight->departureTime->format('H:i'),
+            $this->flight->departureAirport->timezone
         ));
     }
 }
