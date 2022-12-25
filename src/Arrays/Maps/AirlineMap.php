@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Arrays\Maps;
 
 use App\Entities\Airline;
-use ArrayIterator;
-use IteratorAggregate;
-use Traversable;
 
-class AirlineMap implements IteratorAggregate
+class AirlineMap
 {
     private $airlines = [];
 
@@ -28,8 +25,10 @@ class AirlineMap implements IteratorAggregate
         return isset($this->airlines[$code]);
     }
 
-    public function getIterator(): Traversable
+    public function forEach(callable $callback)
     {
-        return new ArrayIterator($this->airlines);
+        foreach ($this->airlines as $airline) {
+            $callback($airline);
+        }
     }
 }

@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Arrays\FlightArrayArray;
+use App\Arrays\Maps\AirlineMap;
+use App\Arrays\Maps\AirportMap;
+use App\Arrays\Maps\AirportStack;
 use App\Entities\Airport;
 use App\Entities\Flight;
 use App\Entities\ScheduledFlight;
 use DateTime;
+use SplStack;
 
 class FlightPlan
 {

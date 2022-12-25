@@ -40,8 +40,8 @@ class Flight
         $this->arrivalTime = $arrivalTime;
         $this->price = $price;
 
-        // $departureAirport->addFlight($this);
-        // $arrivalAirport->addFlight($this);
+        $departureAirport->addFlight($this);
+        $arrivalAirport->addFlight($this);
     }
 
     public function jsonSerialize()

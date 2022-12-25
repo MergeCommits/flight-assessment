@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Arrays;
 
 use App\Entities\Flight;
-use ArrayIterator;
-use Traversable;
 
 class FlightArray
 {
@@ -22,8 +20,10 @@ class FlightArray
         return $this->flights[$index];
     }
 
-    public function getIterator(): Traversable
+    public function forEach(callable $callback)
     {
-        return new ArrayIterator($this->flights);
+        foreach ($this->flights as $flight) {
+            $callback($flight);
+        }
     }
 }
