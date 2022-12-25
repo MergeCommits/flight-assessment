@@ -30,9 +30,9 @@ class StringArray
         }
     }
 
-    public function toArray(): array
+    public function join(string $separator): string
     {
-        return $this->strings;
+        return implode($separator, $this->strings);
     }
 
     public function clone(): StringArray

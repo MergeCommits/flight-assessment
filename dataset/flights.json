@@ -11,7 +11,7 @@
         },
         {
             "airline": "AC",
-            "number": "347",
+            "number": "302",
             "departure_airport": "YUL",
             "departure_time": "19:00",
             "arrival_airport": "YCC",
@@ -20,7 +20,7 @@
         },
         {
             "airline": "AC",
-            "number": "302",
+            "number": "303",
             "departure_airport": "YVR",
             "departure_time": "11:30",
             "arrival_airport": "YUL",
@@ -29,7 +29,7 @@
         },
         {
             "airline": "AC",
-            "number": "346",
+            "number": "304",
             "departure_airport": "YVR",
             "departure_time": "11:30",
             "arrival_airport": "YCC",
@@ -38,7 +38,7 @@
         },
         {
             "airline": "AC",
-            "number": "348",
+            "number": "305",
             "departure_airport": "YCC",
             "departure_time": "07:00",
             "arrival_airport": "YUL",
@@ -47,7 +47,7 @@
         },
         {
             "airline": "AC",
-            "number": "349",
+            "number": "306",
             "departure_airport": "YCC",
             "departure_time": "09:00",
             "arrival_airport": "YVR",
@@ -65,7 +65,7 @@
         },
         {
             "airline": "WJ",
-            "number": "447",
+            "number": "402",
             "departure_airport": "YUL",
             "departure_time": "19:00",
             "arrival_airport": "YCC",
@@ -74,7 +74,7 @@
         },
         {
             "airline": "WJ",
-            "number": "402",
+            "number": "403",
             "departure_airport": "YVR",
             "departure_time": "11:30",
             "arrival_airport": "YUL",
@@ -83,7 +83,7 @@
         },
         {
             "airline": "WJ",
-            "number": "446",
+            "number": "404",
             "departure_airport": "YVR",
             "departure_time": "11:30",
             "arrival_airport": "YCC",
@@ -92,7 +92,7 @@
         },
         {
             "airline": "WJ",
-            "number": "448",
+            "number": "405",
             "departure_airport": "YCC",
             "departure_time": "07:00",
             "arrival_airport": "YUL",
@@ -101,7 +101,7 @@
         },
         {
             "airline": "WJ",
-            "number": "449",
+            "number": "406",
             "departure_airport": "YCC",
             "departure_time": "09:00",
             "arrival_airport": "YVR",

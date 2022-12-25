@@ -15,9 +15,13 @@ class FlightArray
         $this->flights[] = $flight;
     }
 
-    public function get(int $index): Flight
+    public function joinFlightNumbers(string $separator): string
     {
-        return $this->flights[$index];
+        $flightNumbers = [];
+        foreach ($this->flights as $flight) {
+            $flightNumbers[] = $flight->number;
+        }
+        return implode($separator, $flightNumbers);
     }
 
     public function forEach(callable $callback)
@@ -25,5 +29,12 @@ class FlightArray
         foreach ($this->flights as $flight) {
             $callback($flight);
         }
+    }
+
+    public function clone(): FlightArray
+    {
+        $clone = new FlightArray();
+        $clone->flights = $this->flights;
+        return $clone;
     }
 }

@@ -6,6 +6,8 @@ use App\Entities\Airport;
 use App\Entities\Airline;
 use App\Entities\Flight;
 use App\Arrays\StringArray;
+use App\Arrays\FlightArray;
+use App\Arrays\ArrayOfFlightArray;
 
 require_once('vendor/autoload.php');
 
@@ -36,44 +38,46 @@ $flights = Flight::fromJsonArray(getArrayFromJsonFile('flights.json', 'flights')
 function findAllPossibleFlightsBetweenAirports(
     Airport $origin,
     Airport $destination
-): array {
+): ArrayOfFlightArray {
     $visitedAirports = new StringArray();
-    $flightPaths = [];
+    $allValidFlightPaths = new ArrayOfFlightArray();
 
-    DFS($origin, $destination, $visitedAirports, "", $flightPaths);
+    DFS($origin, $destination, $visitedAirports, new FlightArray(), $allValidFlightPaths);
 
-    return $flightPaths;
+    return $allValidFlightPaths;
 }
 
-function DFS(Airport $origin, Airport $destination, StringArray $visitedAirports, string $flightNumbers, array &$flightPaths)
-{
+function DFS(
+    Airport $origin,
+    Airport $destination,
+    StringArray $visitedAirports,
+    FlightArray $currentFlightPath,
+    ArrayOfFlightArray $allValidFlightPaths
+): void {
     $visited = $visitedAirports->clone();
     $visited->add($origin->code);
 
-    echo "Visiting {$origin->code}" . '<br>';
-    echo "Visited: " . implode(',', $visited->toArray()) . '<br>';
-    echo "Flight Paths: " . implode(',', $flightPaths) . '<br>';
-    echo "At destination: " . ($origin->code == $destination->code ? 'true' : 'false') . '<br>';
-    // new line
-
     if ($origin->code == $destination->code) {
-        // $flightPaths[] = implode(',', $visited->toArray());
-        echo "Found a path: " . $flightNumbers . '<br>';
-        // echo "Current flight paths: " . implode(',', $flightPaths) . '<br>';
+        $allValidFlightPaths->add($currentFlightPath);
+        echo "Found a path: " . $currentFlightPath->joinFlightNumbers(", ") . '<br>';
         echo '----------' . '<br>';
         return;
     }
 
-    echo '----------' . '<br>';
-
-    $origin->getFlights()->forEach(function (Flight $flight) use ($origin, $destination, $visited, $flightNumbers, $flightPaths) {
-        if (!$visited->contains($flight->arrivalAirport->code)) {
-            echo "Going {$origin->code} --> {$flight->arrivalAirport->code}" . '<br>';
-            echo '----------' . '<br>';
-            $flightAppend = $flightNumbers . $flight->number . ',';
-            DFS($flight->arrivalAirport, $destination, $visited, $flightAppend, $flightPaths);
+    $origin->getFlights()->forEach(
+        function (Flight $flight) use (
+            $destination,
+            $visited,
+            $currentFlightPath,
+            $allValidFlightPaths
+        ) {
+            if (!$visited->contains($flight->arrivalAirport->code)) {
+                $newFlightPath = $currentFlightPath->clone();
+                $newFlightPath->add($flight);
+                DFS($flight->arrivalAirport, $destination, $visited, $newFlightPath, $allValidFlightPaths);
+            }
         }
-    });
+    );
 }
 
 $flightPaths = findAllPossibleFlightsBetweenAirports(
@@ -81,4 +85,4 @@ $flightPaths = findAllPossibleFlightsBetweenAirports(
     $airports->get('YVR')
 );
 
-betterDump($flightPaths);
+echo($flightPaths->joinFlightNumbers(', '));
