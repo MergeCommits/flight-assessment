@@ -61,4 +61,18 @@ class ScheduledFlight
 
         return $candidateArrivalDateTime;
     }
+
+    public function jsonSerialize(): array
+    {
+        $flightJson = $this->flight->jsonSerialize();
+        return [
+            'airline' => $flightJson['airline'],
+            'number' => $flightJson['number'],
+            'departure_airport' => $flightJson['departure_airport'],
+            'departure_time' => $this->departureDateTime->format('Y-m-d H:i'),
+            'arrival_airport' => $flightJson['arrival_airport'],
+            'arrival_time' => $this->arrivalDateTime->format('Y-m-d H:i'),
+            'price' => $flightJson['price']
+        ];
+    }
 }

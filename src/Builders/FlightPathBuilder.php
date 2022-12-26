@@ -18,13 +18,20 @@ final class FlightPathBuilder
         Airport $origin,
         Airport $destination,
         DateTime $departureDate
-    ): ArrayOfFlightArray {
+    ): array {
         $visitedAirports = new StringArray();
         $allValidFlightPaths = new ArrayOfFlightArray();
 
         self::DFS($origin, $destination, $visitedAirports, new FlightArray(), $allValidFlightPaths);
 
-        return $allValidFlightPaths;
+        $amongUs = [];
+        $allValidFlightPaths->forEach(
+            function (FlightArray $flightPath) use (&$amongUs, $departureDate) {
+                $amongUs[] = self::validateFlightPath($flightPath, $departureDate);
+            }
+        );
+
+        return $amongUs;
     }
 
     private static function DFS(
@@ -58,14 +65,15 @@ final class FlightPathBuilder
         );
     }
 
-    private static function validateFlightPath(FlightArray $flightPath, DateTime $departureDate): array
+    private static function validateFlightPath(FlightArray $flightPath, DateTime $departureDate): string
     {
         $scheduledFlights = [];
-        // combine date of departure with the first flight's departure time
         $currentDepartureDateTime = new DateTime(
             $departureDate->format('Y-m-d') . ' ' . $flightPath->get(0)->departureTime->format('H:i'),
             $flightPath->get(0)->departureAirport->timezone
         );
+        $currentDepartureDateTime->modify('-1 minute');
+
         $flightPath->forEach(
             function (Flight $flight) use (&$scheduledFlights, &$currentDepartureDateTime) {
                 $scheduled = new ScheduledFlight($flight, $currentDepartureDateTime);
@@ -73,5 +81,14 @@ final class FlightPathBuilder
                 $currentDepartureDateTime = $scheduled->arrivalDateTime;
             }
         );
+
+        $returnString = '';
+        foreach ($scheduledFlights as $scheduledFlight) {
+            $json = $scheduledFlight->jsonSerialize();
+            $jsonArrayToString = json_encode($json);
+            $returnString .= $jsonArrayToString . '<br>';
+        }
+
+        return $returnString;
     }
 }

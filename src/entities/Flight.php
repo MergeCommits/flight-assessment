@@ -47,12 +47,10 @@ class Flight
     public function jsonSerialize()
     {
         return [
-            'airline' => $this->airline,
+            'airline' => $this->airline->code,
             'number' => $this->number,
-            'departure_airport' => $this->departureAirport,
-            'departure_time' => $this->departureTime,
-            'arrival_airport' => $this->arrivalAirport,
-            'arrival_time' => $this->arrivalTime,
+            'departure_airport' => $this->departureAirport->code,
+            'arrival_airport' => $this->arrivalAirport->code,
             'price' => $this->price
         ];
     }

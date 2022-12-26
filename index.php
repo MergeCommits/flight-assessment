@@ -29,7 +29,7 @@ $flights = Flight::fromJsonArray(getArrayFromJsonFile('flights.json', 'flights')
 $flightPaths = FlightPathBuilder::findAllPossibleFlightsBetweenAirports(
     $airports->get('YUL'),
     $airports->get('YVR'),
-    new DateTime('2021-01-01')
+    new DateTime('2022-12-25', new DateTimeZone("America/Montreal"))
 );
 
-echo($flightPaths->joinFlightNumbers(', '));
+betterDump($flightPaths);
