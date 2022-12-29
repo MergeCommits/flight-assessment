@@ -69,10 +69,10 @@ class ScheduledFlight
             'airline' => $flightJson['airline'],
             'number' => $flightJson['number'],
             'departure_airport' => $flightJson['departure_airport'],
-            'departure_time' => $this->departureDateTime->format('Y-m-d H:i'),
+            'departure_datetime' => $this->departureDateTime->format('Y-m-d H:i'),
             'arrival_airport' => $flightJson['arrival_airport'],
-            'arrival_time' => $this->arrivalDateTime->format('Y-m-d H:i'),
-            'price' => $flightJson['price']
+            'arrival_datetime' => $this->arrivalDateTime->format('Y-m-d H:i'),
+            'price' => (string)$flightJson['price']
         ];
     }
 }

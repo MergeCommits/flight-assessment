@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Builders\FlightDataSet;
 use App\Builders\FlightPathBuilder;
 use App\Entities\Airline;
 use App\Entities\Airport;
@@ -19,6 +18,12 @@ function getArrayFromJsonFile(string $filename, string $key)
 function convertToDateTime(string $date, DateTimeZone $timezone): DateTime
 {
     return DateTime::createFromFormat('Y-m-d', $date, $timezone);
+}
+
+if (!isset($_GET['departure_airport']) || !isset($_GET['arrival_airport'])) {
+    http_response_code(400);
+    echo 'departure_airport and arrival_airport are required';
+    exit;
 }
 
 $airlines = Airline::fromJsonArray(getArrayFromJsonFile('airlines.json', 'airlines'));
@@ -50,6 +55,12 @@ $flightPaths = FlightPathBuilder::findAllTrips(
     $returnDate
 );
 
-// return api response
+$jsonArray = [];
+foreach ($flightPaths as $flightPath) {
+    $jsonArray[] = $flightPath->jsonSerialize();
+}
+
 header('Content-Type: application/json');
-echo json_encode($flightPaths);
+echo json_encode([
+    'trips' => $jsonArray
+]);

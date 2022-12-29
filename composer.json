@@ -12,7 +12,7 @@
     "scripts": {
         "post-install-cmd": "composer install --working-dir=tools/php-cs-fixer",
         "lint": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src tests",
-        "start": "php -S localhost:8000 index.php",
+        "start": "php -S 0.0.0.0:8000 api.php",
         "test": "vendor/bin/phpunit tests"
     },
     "config": {

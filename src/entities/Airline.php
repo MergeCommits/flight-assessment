@@ -17,14 +17,6 @@ class Airline
         $this->name = $name;
     }
 
-    public function jsonSerialize()
-    {
-        return [
-            'code' => $this->code,
-            'name' => $this->name
-        ];
-    }
-
     public static function fromJson($json)
     {
         return new Airline(

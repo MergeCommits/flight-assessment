@@ -13,15 +13,6 @@ class ArrayOfFlightArray
         $this->flightArrays[] = $flightArray;
     }
 
-    public function joinFlightNumbers(string $separator): string
-    {
-        $flightNumbers = [];
-        foreach ($this->flightArrays as $flightArray) {
-            $flightNumbers[] = "[{$flightArray->joinFlightNumbers($separator)}]";
-        }
-        return implode($separator, $flightNumbers);
-    }
-
     public function forEach(callable $callback)
     {
         foreach ($this->flightArrays as $flightArray) {

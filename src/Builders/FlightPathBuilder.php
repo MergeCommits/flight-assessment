@@ -22,11 +22,20 @@ final class FlightPathBuilder
         bool $returnTrip = false,
         DateTime $returnDate = null
     ) {
-        $allPossibleFlights = self::findAllPossibleFlightsBetweenAirports($origin, $destination, $departureDate);
+        $allPossibleFlights = self::findAllPossibleFlightsBetweenAirports(
+            $origin,
+            $destination,
+            $departureDate,
+            $returnTrip,
+            $returnDate
+        );
 
         return $allPossibleFlights;
     }
 
+    /**
+     * @return ScheduledFlightArray[]
+     */
     private static function findAllPossibleFlightsBetweenAirports(
         Airport $origin,
         Airport $destination,
@@ -68,7 +77,7 @@ final class FlightPathBuilder
         $allValidFlightPaths->forEach(
             function (FlightArray $flightPath) use (&$amongUs, $departureDate, $returnDate) {
                 $candidate = self::validateFlightPath($flightPath, $departureDate, $returnDate);
-                if ($candidate != null) {
+                if ($candidate !== null) {
                     $amongUs[] = $candidate;
                 }
             }
