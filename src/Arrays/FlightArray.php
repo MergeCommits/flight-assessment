@@ -20,13 +20,16 @@ class FlightArray
         return $this->flights[$index];
     }
 
-    public function joinFlightNumbers(string $separator): string
+    public function count(): int
     {
-        $flightNumbers = [];
-        foreach ($this->flights as $flight) {
-            $flightNumbers[] = $flight->number;
-        }
-        return implode($separator, $flightNumbers);
+        return count($this->flights);
+    }
+
+    public function concat(FlightArray $other): FlightArray
+    {
+        $clone = $this->clone();
+        $clone->flights = array_merge($clone->flights, $other->flights);
+        return $clone;
     }
 
     public function forEach(callable $callback)

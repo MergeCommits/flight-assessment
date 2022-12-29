@@ -6,6 +6,7 @@ namespace App\Builders;
 
 use App\Arrays\ArrayOfFlightArray;
 use App\Arrays\FlightArray;
+use App\Arrays\ScheduledFlightArray;
 use App\Arrays\StringArray;
 use App\Entities\Airport;
 use App\Entities\Flight;
@@ -14,20 +15,62 @@ use DateTime;
 
 final class FlightPathBuilder
 {
-    public static function findAllPossibleFlightsBetweenAirports(
+    public static function findAllTrips(
         Airport $origin,
         Airport $destination,
-        DateTime $departureDate
-    ): array {
-        $visitedAirports = new StringArray();
-        $allValidFlightPaths = new ArrayOfFlightArray();
+        DateTime $departureDate,
+        bool $returnTrip = false,
+        DateTime $returnDate = null
+    ) {
+        $allPossibleFlights = self::findAllPossibleFlightsBetweenAirports($origin, $destination, $departureDate);
 
-        self::DFS($origin, $destination, $visitedAirports, new FlightArray(), $allValidFlightPaths);
+        return $allPossibleFlights;
+    }
+
+    private static function findAllPossibleFlightsBetweenAirports(
+        Airport $origin,
+        Airport $destination,
+        DateTime $departureDate,
+        bool $returnTrip = false,
+        DateTime $returnDate = null
+    ): array {
+        $allValidFlightPaths = new ArrayOfFlightArray();
+        self::DFS($origin, $destination, new StringArray(), new FlightArray(), $allValidFlightPaths);
+
+        if ($returnTrip) {
+            $allValidReturnPaths = new ArrayOfFlightArray();
+            self::DFS($destination, $origin, new StringArray(), new FlightArray(), $allValidReturnPaths);
+
+            $allFlightsCombinedWithReturnTrips = new ArrayOfFlightArray();
+
+            $allValidFlightPaths->forEach(
+                function (FlightArray $flightPath) use (
+                    $allValidReturnPaths,
+                    $allFlightsCombinedWithReturnTrips
+                ) {
+                    $allValidReturnPaths->forEach(
+                        function (FlightArray $returnPath) use (
+                            $flightPath,
+                            $allFlightsCombinedWithReturnTrips
+                        ) {
+                            $allFlightsCombinedWithReturnTrips->add(
+                                $flightPath->concat($returnPath)
+                            );
+                        }
+                    );
+                }
+            );
+
+            $allValidFlightPaths = $allFlightsCombinedWithReturnTrips;
+        }
 
         $amongUs = [];
         $allValidFlightPaths->forEach(
-            function (FlightArray $flightPath) use (&$amongUs, $departureDate) {
-                $amongUs[] = self::validateFlightPath($flightPath, $departureDate);
+            function (FlightArray $flightPath) use (&$amongUs, $departureDate, $returnDate) {
+                $candidate = self::validateFlightPath($flightPath, $departureDate, $returnDate);
+                if ($candidate != null) {
+                    $amongUs[] = $candidate;
+                }
             }
         );
 
@@ -65,9 +108,11 @@ final class FlightPathBuilder
         );
     }
 
-    private static function validateFlightPath(FlightArray $flightPath, DateTime $departureDate): string
-    {
-        $scheduledFlights = [];
+    private static function convertFlightsToScheduledFlights(
+        FlightArray $flightPath,
+        DateTime $departureDate
+    ): ScheduledFlightArray {
+        $scheduledFlights = new ScheduledFlightArray();
         $currentDepartureDateTime = new DateTime(
             $departureDate->format('Y-m-d') . ' ' . $flightPath->get(0)->departureTime->format('H:i'),
             $flightPath->get(0)->departureAirport->timezone
@@ -77,18 +122,35 @@ final class FlightPathBuilder
         $flightPath->forEach(
             function (Flight $flight) use (&$scheduledFlights, &$currentDepartureDateTime) {
                 $scheduled = new ScheduledFlight($flight, $currentDepartureDateTime);
-                $scheduledFlights[] = $scheduled;
+                $scheduledFlights->add($scheduled);
                 $currentDepartureDateTime = $scheduled->arrivalDateTime;
             }
         );
 
-        $returnString = '';
-        foreach ($scheduledFlights as $scheduledFlight) {
-            $json = $scheduledFlight->jsonSerialize();
-            $jsonArrayToString = json_encode($json);
-            $returnString .= $jsonArrayToString . '<br>';
+        return $scheduledFlights;
+    }
+
+    private static function validateFlightPath(
+        FlightArray $flightPath,
+        DateTime $departureDate,
+        DateTime $returnDate = null
+    ): ScheduledFlightArray | null {
+        $scheduledFlights = self::convertFlightsToScheduledFlights($flightPath, $departureDate);
+
+        if ($returnDate) {
+            $lastFlight = $scheduledFlights->get($scheduledFlights->count() - 1);
+            $lastFlightArrivalDateTime = $lastFlight->arrivalDateTime;
+
+            $returnDate = new DateTime(
+                $returnDate->format('Y-m-d') . ' ' . $lastFlightArrivalDateTime->format('H:i'),
+                $lastFlightArrivalDateTime->getTimezone()
+            );
+
+            if ($returnDate < $lastFlightArrivalDateTime) {
+                return null;
+            }
         }
 
-        return $returnString;
+        return $scheduledFlights;
     }
 }
