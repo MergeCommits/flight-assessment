@@ -31,4 +31,9 @@ class AirlineMap
             $callback($airline);
         }
     }
+
+    public function toPrimitiveArray(): array
+    {
+        return $this->airlines;
+    }
 }

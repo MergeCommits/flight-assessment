@@ -12,6 +12,7 @@ use App\Entities\Airport;
 use App\Entities\Flight;
 use App\Entities\ScheduledFlight;
 use DateTime;
+use DateTimeZone;
 
 final class FlightPathBuilder
 {

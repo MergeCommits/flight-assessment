@@ -32,7 +32,7 @@ class AirportMap
         }
     }
 
-    public function toArray(): array
+    public function toPrimitiveArray(): array
     {
         return array_values($this->airports);
     }

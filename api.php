@@ -26,6 +26,18 @@ if (!isset($_GET['departure_airport']) || !isset($_GET['arrival_airport'])) {
     exit;
 }
 
+if ($_GET['departure_airport'] === $_GET['arrival_airport']) {
+    http_response_code(400);
+    echo 'departure_airport and arrival_airport must be different';
+    exit;
+}
+
+if (!isset($_GET['departure_date'])) {
+    http_response_code(400);
+    echo 'departure_date is required';
+    exit;
+}
+
 $airlines = Airline::fromJsonArray(getArrayFromJsonFile('airlines.json', 'airlines'));
 $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airports'));
 $flights = Flight::fromJsonArray(getArrayFromJsonFile('flights.json', 'flights'), $airlines, $airports);

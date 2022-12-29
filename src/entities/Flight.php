@@ -11,6 +11,7 @@ use App\Entities\Airline;
 use App\Entities\Airport;
 use App\Helpers\Money;
 use DateTime;
+use DateTimeZone;
 use Exception;
 
 class Flight
