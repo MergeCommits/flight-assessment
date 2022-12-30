@@ -20,15 +20,17 @@ final class FlightPathBuilder
         Airport $origin,
         Airport $destination,
         DateTime $departureDate,
-        bool $returnTrip = false,
-        DateTime $returnDate = null
+        bool $returnTrip,
+        DateTime|null $returnDate,
+        string|null $preferredAirlineCode
     ) {
         $allPossibleFlights = self::findAllPossibleFlightsBetweenAirports(
             $origin,
             $destination,
             $departureDate,
             $returnTrip,
-            $returnDate
+            $returnDate,
+            $preferredAirlineCode
         );
 
         return $allPossibleFlights;
@@ -41,8 +43,9 @@ final class FlightPathBuilder
         Airport $origin,
         Airport $destination,
         DateTime $departureDate,
-        bool $returnTrip = false,
-        DateTime $returnDate = null
+        bool $returnTrip,
+        DateTime | null $returnDate,
+        string | null $preferredAirlineCode
     ): array {
         $allValidFlightPaths = new ArrayOfFlightArray();
         self::DFS($origin, $destination, new StringArray(), new FlightArray(), $allValidFlightPaths);
@@ -76,8 +79,8 @@ final class FlightPathBuilder
 
         $amongUs = [];
         $allValidFlightPaths->forEach(
-            function (FlightArray $flightPath) use (&$amongUs, $departureDate, $returnDate) {
-                $candidate = self::validateFlightPath($flightPath, $departureDate, $returnDate);
+            function (FlightArray $flightPath) use (&$amongUs, $departureDate, $returnDate, $preferredAirlineCode) {
+                $candidate = self::validateFlightPath($flightPath, $departureDate, $returnDate, $preferredAirlineCode);
                 if ($candidate !== null) {
                     $amongUs[] = $candidate;
                 }
@@ -143,7 +146,8 @@ final class FlightPathBuilder
     private static function validateFlightPath(
         FlightArray $flightPath,
         DateTime $departureDate,
-        DateTime $returnDate = null
+        DateTime | null $returnDate,
+        string | null $preferredAirlineCode
     ): ScheduledFlightArray | null {
         $scheduledFlights = self::convertFlightsToScheduledFlights($flightPath, $departureDate);
 
@@ -157,6 +161,21 @@ final class FlightPathBuilder
             );
 
             if ($returnDate < $lastFlightArrivalDateTime) {
+                return null;
+            }
+        }
+
+        if ($preferredAirlineCode !== null) {
+            $preferred = true;
+            $scheduledFlights->forEach(
+                function (ScheduledFlight $scheduledFlight) use ($preferredAirlineCode, &$preferred) {
+                    if ($scheduledFlight->flight->airline->code !== $preferredAirlineCode) {
+                        $preferred = false;
+                    }
+                }
+            );
+
+            if (!$preferred) {
                 return null;
             }
         }

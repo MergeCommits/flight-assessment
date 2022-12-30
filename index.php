@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Builders\FlightPathBuilder;
 use App\Entities\Airline;
 use App\Entities\Airport;
-use App\Entities\Flight;
 
 require_once('vendor/autoload.php');
 
@@ -22,7 +21,7 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
 <html>
 
 <head>
-    <title>My First Page</title>
+    <title>Flight Search</title>
     <style>
         body {
             background-color: #000;
@@ -33,7 +32,28 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
             display: flex;
             flex-direction: column;
             max-width: 800px;
-            gap: 10px;
+            gap: 15px;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #fff;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .api-output {
+            animation: flash 2s;
+        }
+
+        @keyframes flash {
+            0% {
+                background-color: rgba(0, 100, 0, 0.5);
+            }
+
+            100% {
+                background-color: #000;
+            }
         }
     </style>
 </head>
@@ -42,18 +62,18 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
         <form action="/api.php" method="get">
             <div class="form-layout">
                 <label>
-                    Departure Date:
+                    Departure Airport:
                     <select name="departure_airport" required>
                         <?php foreach ($airports->toPrimitiveArray() as $airport): ?>
-                            <option value="<?php echo $airport->code; ?>"><?php echo $airport->name; ?></option>
+                            <option value="<?php echo $airport->code; ?>"><?php echo "{$airport->name} ({$airport->code})"; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
                 <label>
-                    Arrival Date:
+                    Arrival Airport:
                     <select name="arrival_airport" required>
                         <?php foreach ($airports->toPrimitiveArray() as $airport): ?>
-                            <option value="<?php echo $airport->code; ?>"><?php echo $airport->name; ?></option>
+                            <option value="<?php echo $airport->code; ?>"><?php echo "{$airport->name} ({$airport->code})"; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -70,20 +90,40 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
                         </select>
                     </label>
                 </div>
+            </div>
+            <div class="divider"></div>
+            <div class="form-layout">
+                <label>
+                    Optional fields
+                </label>
                 <label>
                     Return Date:
                     <input type="date" name="return_date">
                 </label>
+                <label>
+                    Preferred airline:
+                    <select name="preferred_airline">
+                        <option value="">Any</option>
+                        <?php foreach ($airlines->toPrimitiveArray() as $airline): ?>
+                            <option value="<?php echo $airline->code; ?>"><?php echo "{$airline->name} ({$airline->code})"; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+            <div class="divider"></div>
+            <div class="form-layout">
                 <input type="submit" value="Submit" />
                 <div>
-                    <p id="api-call-preview">
+                    <label for="api-call-preview">API Request:</label>
+                    <pre id="api-call-preview">
 
-                    </p>
+                    </pre>
                 </div>
                 <div>
-                    <p id="api-call-output">
+                    <label for="api-call-output">API Response:</label>
+                    <pre id="api-call-output">
 
-                    </p>
+                    </pre>
                 </div>
             </div>
         </form>
@@ -91,35 +131,57 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
 </body>
 
 <script lang="javascript">
-    function updateAPIPreview() {
-        const form = document.querySelector('form');
-        const formData = new FormData(form);
-        const url = new URL('/api.php', window.location.origin);
-        url.search = new URLSearchParams(formData).toString();
-        document.querySelector('#api-call-preview').innerText = url.toString();
+
+function updateAPIPreview() {
+    const form = document.querySelector('form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const json = JSON.stringify(data, null, 4);
+    document.querySelector('#api-call-preview').innerHTML = json;
+}
+
+let cooldown = false;
+function flashAPIOutput() {
+    if (cooldown) {
+        return;
     }
 
-    document.querySelectorAll('input, select').forEach((element) => {
-        element.addEventListener('change', updateAPIPreview);
-    });
+    const output = document.querySelector('#api-call-output');
+    output.classList.add('api-output');
+    cooldown = true;
 
-    // perform update on page ready
-    updateAPIPreview();
+    setTimeout(() => {
+        output.classList.remove('api-output');
+        cooldown = false;
+    }, 2000);
+}
 
-    // on submit, make an API call to the API and print response without leaving Page
-    // print response even if it's 400
-    document.querySelector('form').addEventListener('submit', (event) => {
-        event.preventDefault();
-        const form = document.querySelector('form');
-        const formData = new FormData(form);
-        const url = new URL('/api.php', window.location.origin);
-        url.search = new URLSearchParams(formData).toString();
-        fetch(url.toString())
-            .then((response) => response.text())
-            .then((text) => {
-                document.querySelector('#api-call-output').innerHTML = text;
-            });
-    });
+updateAPIPreview();
+
+document.querySelectorAll('input, select').forEach((element) => {
+    element.addEventListener('change', updateAPIPreview);
+});
+
+document.querySelector('form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = document.querySelector('form');
+    const formData = new FormData(form);
+    const url = new URL('/api.php', window.location.origin);
+    url.search = new URLSearchParams(formData).toString();
+    fetch(url.toString())
+        .then((response) => response.text())
+        .then((text) => {
+            try {
+                const json = JSON.parse(text);
+                text = JSON.stringify(json, null, 4);
+            } catch (e) {
+                // do nothing
+            }
+            document.querySelector('#api-call-output').innerHTML = text;
+            flashAPIOutput();
+        });
+});
+
 </script>
 
 </html>
