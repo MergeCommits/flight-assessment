@@ -7,7 +7,7 @@
             "departure_time": "22:00",
             "arrival_airport": "YVR",
             "arrival_time": "20:00",
-            "price": "273.23"
+            "price": "673.23"
         },
         {
             "airline": "AC",
@@ -16,7 +16,7 @@
             "departure_time": "19:00",
             "arrival_airport": "YCC",
             "arrival_time": "20:11",
-            "price": "353.41"
+            "price": "827.53"
         },
         {
             "airline": "AC",
@@ -25,7 +25,7 @@
             "departure_time": "11:30",
             "arrival_airport": "YUL",
             "arrival_time": "19:11",
-            "price": "220.63"
+            "price": "482.34"
         },
         {
             "airline": "AC",
@@ -34,7 +34,7 @@
             "departure_time": "11:30",
             "arrival_airport": "YCC",
             "arrival_time": "18:35",
-            "price": "75.41"
+            "price": "875.41"
         },
         {
             "airline": "AC",
@@ -43,7 +43,7 @@
             "departure_time": "07:00",
             "arrival_airport": "YUL",
             "arrival_time": "08:11",
-            "price": "745.41"
+            "price": "725.23"
         },
         {
             "airline": "AC",
@@ -52,7 +52,7 @@
             "departure_time": "09:00",
             "arrival_airport": "YVR",
             "arrival_time": "16:05",
-            "price": "765.41"
+            "price": "232.32"
         },
         {
             "airline": "WJ",
@@ -61,7 +61,7 @@
             "departure_time": "07:35",
             "arrival_airport": "YVR",
             "arrival_time": "10:05",
-            "price": "5730.23"
+            "price": "900.00"
         },
         {
             "airline": "WJ",
@@ -70,7 +70,7 @@
             "departure_time": "19:00",
             "arrival_airport": "YCC",
             "arrival_time": "20:11",
-            "price": "2503.41"
+            "price": "1635.12"
         },
         {
             "airline": "WJ",
@@ -79,7 +79,7 @@
             "departure_time": "11:30",
             "arrival_airport": "YUL",
             "arrival_time": "19:11",
-            "price": "4020.63"
+            "price": "794.33"
         },
         {
             "airline": "WJ",
@@ -88,7 +88,7 @@
             "departure_time": "11:30",
             "arrival_airport": "YCC",
             "arrival_time": "18:35",
-            "price": "205.41"
+            "price": "536.23"
         },
         {
             "airline": "WJ",
@@ -97,7 +97,7 @@
             "departure_time": "07:00",
             "arrival_airport": "YUL",
             "arrival_time": "08:11",
-            "price": "7605.41"
+            "price": "362.43"
         },
         {
             "airline": "WJ",
@@ -106,7 +106,7 @@
             "departure_time": "09:00",
             "arrival_airport": "YVR",
             "arrival_time": "16:04",
-            "price": "7705.41"
+            "price": "758.45"
         }
     ]
 }
