@@ -55,7 +55,7 @@ $roundTrip = $_GET['trip_type'] == 'round-trip' ? true : false;
 $returnDate = null;
 
 if ($roundTrip) {
-    $returnDateString = $_GET['return_date'] ?? null;
+    $returnDateString = $_GET['return_date'] !== '' ? $_GET['return_date'] : null;
     if ($returnDateString !== null) {
         $returnDate = convertToDateTime($returnDateString, $originAirportTimezone);
     }
