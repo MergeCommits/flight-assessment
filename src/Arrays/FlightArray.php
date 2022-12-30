@@ -20,11 +20,6 @@ class FlightArray
         return $this->flights[$index];
     }
 
-    public function count(): int
-    {
-        return count($this->flights);
-    }
-
     public function concat(FlightArray $other): FlightArray
     {
         $clone = $this->clone();

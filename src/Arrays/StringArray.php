@@ -13,11 +13,6 @@ class StringArray
         $this->strings[] = $string;
     }
 
-    public function get(int $index): string
-    {
-        return $this->strings[$index];
-    }
-
     public function contains(string $string): bool
     {
         return in_array($string, $this->strings);
@@ -28,11 +23,6 @@ class StringArray
         foreach ($this->strings as $string) {
             $callback($string);
         }
-    }
-
-    public function join(string $separator): string
-    {
-        return implode($separator, $this->strings);
     }
 
     public function clone(): StringArray

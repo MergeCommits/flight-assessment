@@ -4,14 +4,18 @@ Online demonstration is available here: https://flight-assessment.000webhostapp.
 
 ## Overview
 
-This is a simple API that returns a list of flights that can be taken to get from one airport to another with several parameters. Requests use the following parameters:
+This is a simple API that returns a list of flights from one airport to another.
 
-- `departure_airport` is the IATA code of the airport to depart from.
-- `arrival_airport` is the IATA code of the airport to arrive at.
-- `departure_date` is the date to depart on.
-- `trip_type` is either `one-way` or `round-trip`.
-- `return_date` is the date to return on. This is only used if `trip_type` is `round-trip`.
-- `preferred_airline` is the IATA code of the preferred airline. If this is set, then only flights from this airline will be returned.
+Requests use the following parameters:
+
+- `departure_airport` - IATA code of the airport to depart from.
+- `arrival_airport` -IATA code of the airport to arrive at.
+- `departure_date` - Starting date of the trip. Assumes that the trip starts at 12AM in the first flight's timezone.
+- `trip_type` - `one-way` or `round-trip`.
+- `return_date` (optional) - The date the flight should return on or before. Assumes that any time until 11:59PM of the date in the last flight's timezone is valid.
+  - This parameter is only used if the trip type is `round-trip`.
+- `preferred_airline` (optional) - If this is set, then only flights from the specified airline will considered.
+- `sort` (optional) - Sorts the resulting flights. Can be set to `price`, `duration` or `stops`.
 
 ## Setup
 
@@ -30,8 +34,6 @@ Run linter:
 Start web server:
 
     composer start
-
-## API Documentation
 
 ## Assumptions
 
