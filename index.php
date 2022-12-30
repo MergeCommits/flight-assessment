@@ -23,8 +23,8 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
     <title>Flight Search</title>
     <style>
         body {
-            background-color: #000;
-            color: #fff;
+            background-color: rgb(15, 23, 42);
+            color: rgb(148, 163, 184);
         }
 
         .form-layout {
@@ -51,8 +51,26 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
             }
 
             100% {
-                background-color: #000;
+                background-color: rgb(15, 23, 42);
             }
+        }
+
+        input, select {
+            background-color: rgb(25, 33, 52);
+            color: rgb(148, 163, 184);
+            border: 1px solid gray;
+        }
+
+        a {
+            color: rgb(148, 163, 184);
+        }
+
+        a:hover {
+            color: rgb(255, 255, 255);
+        }
+
+        h1, h2, h3 {
+            font-size: 1.2em;
         }
     </style>
 </head>
@@ -64,12 +82,14 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
         </div>
         <div class="divider"></div>
         <div>
-            <h2>Datasets</h2>
-            <div class="form-layout">
+            <details>
+                <summary>Datasets</summary>
+                <div class="form-layout">
                 <a href="dataset/airlines.json">airlines.json</a>
                 <a href="dataset/airports.json">airports.json</a>
                 <a href="dataset/flights.json">flights.json</a>
-            </div>
+                </div>
+            </details>  
         </div>
         <div class="divider"></div>
         <h2>API requests</h2>
