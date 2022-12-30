@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Builders\FlightPathBuilder;
 use App\Entities\Airline;
 use App\Entities\Airport;
 
@@ -59,6 +58,21 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
 </head>
 <body>
     <div>
+        <div>
+            <h1>Flight Search</h1>
+            <p>Search for flights between two airports.</p>
+        </div>
+        <div class="divider"></div>
+        <div>
+            <h2>Datasets</h2>
+            <div class="form-layout">
+                <a href="dataset/airlines.json">airlines.json</a>
+                <a href="dataset/airports.json">airports.json</a>
+                <a href="dataset/flights.json">flights.json</a>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <h2>API requests</h2>
         <form action="/api.php" method="get">
             <div class="form-layout">
                 <label>
@@ -92,24 +106,34 @@ $airports = Airport::fromJsonArray(getArrayFromJsonFile('airports.json', 'airpor
                 </div>
             </div>
             <div class="divider"></div>
-            <div class="form-layout">
-                <label>
-                    Optional fields
-                </label>
-                <label>
-                    Return Date:
-                    <input type="date" name="return_date">
-                </label>
-                <label>
-                    Preferred airline:
-                    <select name="preferred_airline">
-                        <option value="">Any</option>
-                        <?php foreach ($airlines->toPrimitiveArray() as $airline): ?>
-                            <option value="<?php echo $airline->code; ?>"><?php echo "{$airline->name} ({$airline->code})"; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-            </div>
+                <div>
+                    <h3>
+                        Optional fields
+                    </h3>
+                                <div class="form-layout">
+                    <label>
+                        Return Date:
+                        <input type="date" name="return_date">
+                    </label>
+                    <label>
+                        Preferred airline:
+                        <select name="preferred_airline">
+                            <option value="">Any</option>
+                            <?php foreach ($airlines->toPrimitiveArray() as $airline): ?>
+                                <option value="<?php echo $airline->code; ?>"><?php echo "{$airline->name} ({$airline->code})"; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label>
+                        Sort by:
+                        <select name="sort_by">
+                            <option value="price">Price</option>
+                            <option value="duration">Duration</option>
+                            <option value="stops">Number of stops</option>
+                        </select>
+                    </label>
+                                </div>
+                </div>
             <div class="divider"></div>
             <div class="form-layout">
                 <input type="submit" value="Submit" />

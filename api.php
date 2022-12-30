@@ -50,6 +50,7 @@ $originAirportTimezone = $airports->get($originAirportCode)->timezone;
 $departureDate = convertToDateTime($_GET['departure_date'], $originAirportTimezone);
 
 $preferredAirlineCode = $_GET['preferred_airline'] !== '' ? $_GET['preferred_airline'] : null;
+$sortBy = $_GET['sort_by'] !== '' ? $_GET['sort_by'] : null;
 
 $roundTrip = $_GET['trip_type'] == 'round-trip' ? true : false;
 $returnDate = null;
@@ -67,7 +68,8 @@ $flightPaths = FlightPathBuilder::findAllTrips(
     $departureDate,
     $roundTrip,
     $returnDate,
-    $preferredAirlineCode
+    $preferredAirlineCode,
+    $sortBy
 );
 
 $jsonArray = [];

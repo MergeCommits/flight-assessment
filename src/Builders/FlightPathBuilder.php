@@ -21,8 +21,9 @@ final class FlightPathBuilder
         Airport $destination,
         DateTime $departureDate,
         bool $returnTrip,
-        DateTime|null $returnDate,
-        string|null $preferredAirlineCode
+        DateTime | null $returnDate,
+        string | null $preferredAirlineCode,
+        string | null $sortBy
     ) {
         $allPossibleFlights = self::findAllPossibleFlightsBetweenAirports(
             $origin,
@@ -32,6 +33,14 @@ final class FlightPathBuilder
             $returnDate,
             $preferredAirlineCode
         );
+
+        if ($sortBy === 'price') {
+            $allPossibleFlights = ScheduledFlightArray::sortByPrice($allPossibleFlights);
+        } elseif ($sortBy === 'duration') {
+            $allPossibleFlights = ScheduledFlightArray::sortByDuration($allPossibleFlights);
+        } elseif ($sortBy === 'stops') {
+            $allPossibleFlights = ScheduledFlightArray::sortByNumberOfStops($allPossibleFlights);
+        }
 
         return $allPossibleFlights;
     }

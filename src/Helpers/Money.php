@@ -22,4 +22,9 @@ class Money
     {
         return $this->amount;
     }
+
+    public function spaceshipOperator(Money $other)
+    {
+        return bccomp($this->amount, $other->amount, 2);
+    }
 }
